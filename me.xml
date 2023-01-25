@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE student PUBLIC "-//Portland State University//DTD CS410J Grade Book//EN" "http://www.cs.pdx.edu/~whitlock/dtds/gradebook.dtd">
+<student enrolled-section="graduate">
+<id>mattcole</id>
+<firstName>Matthew</firstName>
+<lastName>Cole</lastName>
+<email>mattcole@pdx.edu</email>
+<major>CS</major>
+<notes>
+<note>Matthew Cole would like to learn a lot!</note>
+<note>Matthew Cole has these comments: Nothing</note>
+</notes>
+</student>
