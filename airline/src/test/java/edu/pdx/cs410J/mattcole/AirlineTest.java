@@ -46,7 +46,7 @@ public class AirlineTest {
     {
         var airline = setupBasicAirline();
         var flights = airline.getFlights();
-        assertThat(flights.size(), equalTo((long) 2));
+        assertThat(flights.size(), equalTo( 2));
     }
 
     /**
