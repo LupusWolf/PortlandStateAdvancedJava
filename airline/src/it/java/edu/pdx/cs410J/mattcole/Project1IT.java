@@ -91,7 +91,7 @@ class Project1IT extends InvokeMainTestCase {
     void testReadMePrint()
     {
         MainMethodResult result = invokeMain("-README");
-        assertThat(result.getTextWrittenToStandardOut(), containsString("A simple program"));
+        assertThat(result.getTextWrittenToStandardOut(), containsString("Matthew"));
     }
 
 
