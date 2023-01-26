@@ -17,6 +17,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 class Project1Test {
 
+  /**
+   * Ensure README can be read as a resource
+   * @throws IOException Throws io exception when readme.txt doesn't exist
+   */
   @Test
   void readmeCanBeReadAsResource() throws IOException {
     try (
@@ -25,7 +29,52 @@ class Project1Test {
       assertThat(readme, not(nullValue()));
       BufferedReader reader = new BufferedReader(new InputStreamReader(readme));
       String line = reader.readLine();
-      assertThat(line, containsString("This is a README file!"));
+      assertThat(line, containsString("Matthew"));
     }
+  }
+  /**
+   * Test date time function to make sure it can correctly determine whether a string is a valid time
+   * using the string: "Not a valid time"
+   */
+  @Test
+  void dateAndTimeTest1()
+  {
+    assertThat(Project1.isValidDateAndTime("Not a valid time"), equalTo(false));
+  }
+  /**
+   * Test date time function to make sure it can correctly determine whether a string is a valid time
+   * using the string: "3/15/2023 10:39"
+   */
+  @Test
+  void dateAndTimeTest2()
+  {
+    assertThat(Project1.isValidDateAndTime("3/15/2023 10:39"), equalTo(true));
+  }
+  /**
+   * Test date time function to make sure it can correctly determine whether a string is a valid time
+   * using the string: "03/2/2023 1:03"
+   */
+  @Test
+  void dateAndTimeTest3()
+  {
+    assertThat(Project1.isValidDateAndTime("03/2/2023 1:03"), equalTo(true));
+  }
+  /**
+   * Test date time function to make sure it can correctly determine whether a string is a valid time
+   * using the string: "1/1/2000 4:05"
+   */
+  @Test
+  void dateAndTimeTest4()
+  {
+    assertThat(Project1.isValidDateAndTime("1/1/2000 4:05"), equalTo(true));
+  }
+  /**
+   * Test date time function to make sure it can correctly determine whether a string is a valid time
+   * using the string: "4/12/200 1:05"
+   */
+  @Test
+  void dateAndTimeTest5()
+  {
+    assertThat(Project1.isValidDateAndTime("4/12/200 1:05"), equalTo(false));
   }
 }
