@@ -20,19 +20,19 @@ accordingly
       
   </parent>
     
-  <groupId>edu.pdx.cs410J.YourUserId</groupId>
+  <groupId>edu.pdx.cs410J.mattcole</groupId>
     
-  <artifactId>PortlandStateJavaWinter2023</artifactId>
+  <artifactId>PortlandStateAdvancedJava</artifactId>
     
   <version>2023.0.0</version>
     
   <packaging>pom</packaging>
     
-  <name>PSUJavaWinter2023</name>
+  <name>PortlandStateAdvancedJava</name>
     
   <description>Source code written in the Winter 2023 offering of Advanced Programming with Java</description>
     
-  <url>http://YourGitHubUserInLowerCase.github.io/PortlandStateJavaWinter2023</url>
+  <url>http://lupuswolf.github.io/PortlandStateAdvancedJava</url>
     
   <modules>
         
@@ -54,7 +54,7 @@ accordingly
         
     <system>github</system>
         
-    <url>https://github.com/YourGitHubUser/PortlandStateJavaWinter2023/issues</url>
+    <url>https://github.com/LupusWolf/PortlandStateAdvancedJava/issues</url>
       
   </issueManagement>
     
@@ -136,7 +136,7 @@ accordingly
                 
         <configuration>
                     
-          <topSiteURL>scm:git:git@github.com:YourGithubUser/PortlandStateJavaWinter2023.git</topSiteURL>
+          <topSiteURL>scm:git:git@github.com:LupusWolf/PortlandStateAdvancedJava.git</topSiteURL>
                   
         </configuration>
               
@@ -166,7 +166,7 @@ accordingly
     
   <scm>
         
-    <connection>scm:git:git@github.com:YourGithubUser/PortlandStateJavaWinter2023.git</connection>
+    <connection>scm:git:git@github.com:LupusWolf/PortlandStateAdvancedJava.git</connection>
       
   </scm>
     
@@ -186,7 +186,7 @@ accordingly
             
       <name>GitHub Pages</name>
             
-      <url>scm:git:git@github.com:YourGithubUser/PortlandStateJavaWinter2023.git</url>
+      <url>scm:git:git@github.com:LupusWolf/PortlandStateAdvancedJava.git</url>
           
     </site>
       
