@@ -15,7 +15,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * from <code>Project1IT</code> which is an integration test (and can capture data
  * written to {@link System#out} and the like.
  */
-class Project1Test {
+class Project2Test {
 
   /**
    * Ensure README can be read as a resource
@@ -24,7 +24,7 @@ class Project1Test {
   @Test
   void readmeCanBeReadAsResource() throws IOException {
     try (
-      InputStream readme = Project1.class.getResourceAsStream("README.txt")
+      InputStream readme = Project2.class.getResourceAsStream("README.txt")
     ) {
       assertThat(readme, not(nullValue()));
       BufferedReader reader = new BufferedReader(new InputStreamReader(readme));
@@ -39,7 +39,7 @@ class Project1Test {
   @Test
   void dateAndTimeTest1()
   {
-    assertThat(Project1.isValidDateAndTime("Not a valid time"), equalTo(false));
+    assertThat(Project2.isValidDateAndTime("Not a valid time"), equalTo(false));
   }
   /**
    * Test date time function to make sure it can correctly determine whether a string is a valid time
@@ -48,7 +48,7 @@ class Project1Test {
   @Test
   void dateAndTimeTest2()
   {
-    assertThat(Project1.isValidDateAndTime("3/15/2023 10:39"), equalTo(true));
+    assertThat(Project2.isValidDateAndTime("3/15/2023 10:39"), equalTo(true));
   }
   /**
    * Test date time function to make sure it can correctly determine whether a string is a valid time
@@ -57,7 +57,7 @@ class Project1Test {
   @Test
   void dateAndTimeTest3()
   {
-    assertThat(Project1.isValidDateAndTime("03/2/2023 1:03"), equalTo(true));
+    assertThat(Project2.isValidDateAndTime("03/2/2023 1:03"), equalTo(true));
   }
   /**
    * Test date time function to make sure it can correctly determine whether a string is a valid time
@@ -66,7 +66,7 @@ class Project1Test {
   @Test
   void dateAndTimeTest4()
   {
-    assertThat(Project1.isValidDateAndTime("1/1/2000 4:05"), equalTo(true));
+    assertThat(Project2.isValidDateAndTime("1/1/2000 4:05"), equalTo(true));
   }
   /**
    * Test date time function to make sure it can correctly determine whether a string is a valid time
@@ -75,6 +75,6 @@ class Project1Test {
   @Test
   void dateAndTimeTest5()
   {
-    assertThat(Project1.isValidDateAndTime("4/12/200 1:05"), equalTo(false));
+    assertThat(Project2.isValidDateAndTime("4/12/200 1:05"), equalTo(false));
   }
 }

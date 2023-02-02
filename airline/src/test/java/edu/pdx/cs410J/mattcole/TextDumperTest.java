@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.*;
+import java.util.ArrayList;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -25,17 +26,32 @@ public class TextDumperTest {
     assertThat(text, containsString(airlineName));
   }
 
-  @Test
-  void canParseTextWrittenByTextDumper(@TempDir File tempDir) throws IOException, ParserException {
-    String airlineName = "Test Airline";
+  Airline createDumpThenParseAirline(File tempDir, String airlineName, Flight[] flights) throws IOException, ParserException
+  {
     Airline airline = new Airline(airlineName);
 
+    for (Flight flight : flights)
+    {
+      airline.addFlight(flight);
+    }
     File textFile = new File(tempDir, "airline.txt");
     TextDumper dumper = new TextDumper(new FileWriter(textFile));
     dumper.dump(airline);
 
     TextParser parser = new TextParser(new FileReader(textFile));
-    Airline read = parser.parse();
-    assertThat(read.getName(), equalTo(airlineName));
+    return parser.parse();
+  }
+  @Test
+  void canParseTextWrittenByTextDumper(@TempDir File tempDir) throws IOException, ParserException {
+    String airlineName = "Test Airline";
+    Airline airline = createDumpThenParseAirline(tempDir,airlineName, new Flight[0]);
+    assertThat(airline.getName(), equalTo(airlineName));
+  }
+  @Test
+  void flightCorrectlyStored(@TempDir File tempDir) throws IOException, ParserException
+  {
+    Flight flight = new Flight(4,"source","b","c","d");
+    Airline airline = createDumpThenParseAirline(tempDir,"airline",new Flight[] {flight});
+    assertThat(airline.getFlights().stream().findFirst().get().getSource(),equalTo("source"));
   }
 }

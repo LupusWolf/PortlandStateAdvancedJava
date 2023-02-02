@@ -18,7 +18,6 @@ public class AirlineTest {
     final int flight2Numb = 43;
 
     /**
-     *
      * Sets up a basic airline for testing
      */
     Airline setupBasicAirline()

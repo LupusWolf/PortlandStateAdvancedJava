@@ -13,11 +13,20 @@ import java.io.Reader;
  */
 public class TextParser implements AirlineParser<Airline> {
   private final Reader reader;
+  /**
+   * The delimiter that is used by the parser and by the text dumper
+   */
+  public final static String delimiter = ";";
 
   public TextParser(Reader reader) {
     this.reader = reader;
   }
 
+  /**
+   * Parse data from reader into an airline
+   * @return An airline parsed from the file
+   * @throws ParserException Throws the parser exception if the data is malformed
+   */
   @Override
   public Airline parse() throws ParserException {
     try (
@@ -29,10 +38,19 @@ public class TextParser implements AirlineParser<Airline> {
       if (airlineName == null) {
         throw new ParserException("Missing airline name");
       }
+      Airline airline = new Airline(airlineName);
+      while (br.ready())
+      {
+        var splitLine = br.readLine().split(delimiter);
+        var flightNumber = Integer.parseInt(splitLine[0]);
+        var field = Flight.Fields.valueOf(splitLine[1]);
+        var value = splitLine[2];
+        airline.SetDetailOfFlight(flightNumber,field, value);
+      }
 
-      return new Airline(airlineName);
+      return airline;
 
-    } catch (IOException e) {
+    } catch (NumberFormatException | IOException e) {
       throw new ParserException("While parsing airline text", e);
     }
   }

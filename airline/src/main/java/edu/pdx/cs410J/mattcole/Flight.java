@@ -28,6 +28,60 @@ public class Flight extends AbstractFlight {
   String arrival;
 
   /**
+   * Each value in this enum corresponds to a piece of flight data that is written out to and retrieved from a
+   * file. By using the name and valueof enum methods, we are able to cleanly specify a file format without the use
+   * of long string switch cases.
+   */
+  public enum Fields {source, departure, destination, arrival }
+
+  /**
+   * This method allows us to set a field based on an enum value provided by the fields enum. When combined with the
+   * Fields.ValueOf method, we are able to store data based on a string name provided in a file.
+   * @param field field we want to set
+   * @param value The value we want to set it too
+   */
+  public void setFieldByEnum(Fields field, String value)
+  {
+    switch (field)
+    {
+      case source:
+        source = value;
+        break;
+      case departure:
+        departure = value;
+        break;
+      case destination:
+        destination = value;
+        break;
+      case arrival:
+        arrival = value;
+        break;
+    }
+  }
+
+  /**
+   * This allows us to access data in the flight based upon the enum provided in this class. This makes it easier to
+   * store data to a file by allowing us to loop through the fields and get each one.
+   * @param field Field we want to get from the flight
+   * @return The value of the field
+   */
+  public String getFieldByEnum(Fields field)
+  {
+    switch (field)
+    {
+      case source:
+        return source;
+      case departure:
+        return departure;
+      case destination:
+        return destination;
+      case arrival:
+        return arrival;
+    }
+    assert(false);
+    return ""; //There is no way we should reach here
+  }
+  /**
    * Gets flight number
    * @return flight number
    */
@@ -71,6 +125,15 @@ public class Flight extends AbstractFlight {
   public String getArrivalString() {
     return arrival;
   }
+
+  /**
+   * Create flight just by number
+   * @param number number of instantiated flight
+   */
+  public Flight(int number)
+  {
+    this.number = number;
+  }
   /**
    * Creates a new flight with the given values
    * @param number flight number
@@ -79,6 +142,7 @@ public class Flight extends AbstractFlight {
    * @param destination where the flight is heading
    * @param arrival when the flight is going to arrive at its destination
    */
+
   public Flight(int number, String source, String departure, String destination, String arrival)
   {
     this.number = number;
