@@ -7,7 +7,7 @@ import java.io.PrintWriter;
 import java.io.Writer;
 
 /**
- * A skeletal implementation of the <code>TextDumper</code> class for Project 2.
+ * Dumps data in airline into given output stream
  */
 public class TextDumper implements AirlineDumper<Airline> {
   private final Writer writer;

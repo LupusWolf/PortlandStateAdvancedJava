@@ -5,11 +5,10 @@ import edu.pdx.cs410J.ParserException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.Reader;
 
 /**
- * A skeletal implementation of the <code>TextParser</code> class for Project 2.
+ * Parses data from a given input stream into an airline
  */
 public class TextParser implements AirlineParser<Airline> {
   private final Reader reader;
@@ -52,6 +51,15 @@ public class TextParser implements AirlineParser<Airline> {
 
     } catch (NumberFormatException | IOException e) {
       throw new ParserException("While parsing airline text", e);
+    } catch (Flight.FlightParseDateTimeException e) {
+      throw new ParserException("Error parsing date time in file");
+    } catch (ArrayIndexOutOfBoundsException e) { //Really if we have any sort of error here we should just inform the user of a malformed
+                            //file
+      throw new ParserException("Error parsing file", e);
+    } catch (Project3.ArrivesBeforeDeparts e) {
+      throw new ParserException("Flight in file arrives before it departs", e);
+    } catch (Project3.InvalidAirportCode e) {
+      throw new ParserException("Invalid airport code", e);
     }
   }
 }
