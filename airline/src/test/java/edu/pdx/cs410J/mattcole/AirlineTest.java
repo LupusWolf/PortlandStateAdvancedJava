@@ -32,7 +32,6 @@ public class AirlineTest {
         return airline;
     }
     @Test
-    @Ignore
     void testAirlineName() throws Project3.ArrivesBeforeDeparts, Flight.FlightParseDateTimeException, Project3.InvalidAirportCode {
         var airline = setupBasicAirline();
         assertThat(airline.getName(), equalTo("name"));
@@ -41,7 +40,6 @@ public class AirlineTest {
      * Makes sure that the collection returned by flights is of the correct size
      */
     @Test
-    @Ignore
     void testAirlineCount() throws Project3.ArrivesBeforeDeparts, Flight.FlightParseDateTimeException, Project3.InvalidAirportCode {
         var airline = setupBasicAirline();
         var flights = airline.getFlights();
@@ -52,7 +50,6 @@ public class AirlineTest {
      * Makes sure that flights added to an airline can be retrieved properly
      */
     @Test
-    @Ignore
     void testAirlineNumber() throws Project3.ArrivesBeforeDeparts, Flight.FlightParseDateTimeException, Project3.InvalidAirportCode {
         var airline = setupBasicAirline();
         Collection<Flight> flights = airline.getFlights();
