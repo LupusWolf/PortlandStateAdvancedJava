@@ -1,12 +1,10 @@
 package edu.pdx.cs410J.mattcole;
 
 import edu.pdx.cs410J.ParserException;
-import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.*;
-import java.util.ArrayList;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -47,13 +45,5 @@ public class TextDumperTest {
     String airlineName = "Test Airline";
     Airline airline = createDumpThenParseAirline(tempDir,airlineName, new Flight[0]);
     assertThat(airline.getName(), equalTo(airlineName));
-  }
-  @Ignore
-  @Test
-  void flightCorrectlyStored(@TempDir File tempDir) throws IOException, ParserException
-  {
-    //Flight flight = new Flight(4,"source","b","c","d");
-    //Airline airline = createDumpThenParseAirline(tempDir,"airline",new Flight[] {flight});
-    //assertThat(airline.getFlights().stream().findFirst().get().getSource(),equalTo("source"));
   }
 }

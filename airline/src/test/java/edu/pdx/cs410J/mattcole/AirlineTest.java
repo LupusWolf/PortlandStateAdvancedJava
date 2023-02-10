@@ -1,6 +1,5 @@
 package edu.pdx.cs410J.mattcole;
 
-import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
