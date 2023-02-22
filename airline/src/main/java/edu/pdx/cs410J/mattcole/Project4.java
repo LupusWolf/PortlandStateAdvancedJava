@@ -1,5 +1,7 @@
 package edu.pdx.cs410J.mattcole;
 
+import edu.pdx.cs410J.AirlineDumper;
+import edu.pdx.cs410J.AirlineParser;
 import edu.pdx.cs410J.AirportNames;
 import edu.pdx.cs410J.ParserException;
 
@@ -8,7 +10,7 @@ import java.io.*;
 /**
  * The main class for the CS410J airline Project
  */
-public class Project3 {
+public class Project4 {
   public static final String ErrorInvalidDateTime = "Invalid date time given. Date and time should be in the format:"
                                     + " mm/dd/yyyy hh:mm";
   public static final String ErrorInvalidAirportCode = "Airport code did not match any known airport.";
@@ -20,7 +22,7 @@ public class Project3 {
   public static final String ErrorAirlineDoesntMatch = "Airline provided did not match airline of file";
   public static final String ErrorMalformedFile = "Malformed input file!";
   public static final String ErrorArrivesBeforeDeparts = "A flight departure must be before arrival";
-
+  public static final String ErrorBothXMLandTextFlag = "Can only read from a text OR an xml file not both!";
 
 
   /**
@@ -31,7 +33,7 @@ public class Project3 {
   {
     //copied from the test
     try (
-            InputStream resource = Project3.class.getResourceAsStream(name)
+            InputStream resource = Project4.class.getResourceAsStream(name)
     ) {
       BufferedReader reader = new BufferedReader(new InputStreamReader(resource));
       while (reader.ready())
@@ -61,12 +63,19 @@ public class Project3 {
               commandLine.arrival);
       Airline airline;
       File file = null;
-      if (commandLine.textFileFlag)
+      if (commandLine.textFileFlag || commandLine.xmlFileFlag)
       {
         file = new File(commandLine.pathToTextFile);
       }
       if (file != null && file.exists()) {
-        airline = new TextParser(new FileReader(file)).parse();
+        AirlineParser<Airline> parser = null;
+        if (commandLine.textFileFlag)
+        {
+          airline = new TextParser(new FileReader(file)).parse();
+        } else {
+          airline = new XmlParser(new FileReader(file)).parse();
+        }
+
         if (!airline.getName().equals(commandLine.airlineName)) //Make sure airline in file matches given airline
         {
           System.out.println(ErrorAirlineDoesntMatch);
@@ -81,6 +90,10 @@ public class Project3 {
       }
       if (commandLine.textFileFlag) {
         new TextDumper(new FileWriter(file)).dump(airline);
+      }
+      if (commandLine.xmlFileFlag)
+      {
+        new XmlDumper(new FileWriter(file)).dump(airline);
       }
       if (commandLine.prettyFlag) {
         Writer writer;
@@ -123,6 +136,9 @@ public class Project3 {
     } catch (ArrivesBeforeDeparts e) {
       System.out.println(ErrorArrivesBeforeDeparts);
       System.out.println(CALL_AGAIN_WITH_README_TO_SEE_USAGE);
+    } catch (BothxmlAndRegularFileSelected e) {
+      System.out.println(ErrorBothXMLandTextFlag);
+      System.out.println(CALL_AGAIN_WITH_README_TO_SEE_USAGE);
     }
   }
   public static class TooManyArgs extends Exception { }
@@ -133,6 +149,7 @@ public class Project3 {
 
   public static class ReadmeOption extends Exception {}
   public static class ArrivesBeforeDeparts extends Exception {}
+  public static class BothxmlAndRegularFileSelected extends Exception {}
 
   /**
    * This class parses a command line into a set of fields
@@ -150,8 +167,9 @@ public class Project3 {
     public final String pathToTextFile;
     public final boolean prettyFlag;
     public final String prettyOutput;
+    public final boolean xmlFileFlag;
     public ParsedCommandLine(String[] args) throws ReadmeOption, InvalidOption, TooFewArgs, TooManyArgs,
-            InvalidFlightNumber, InvalidAirportCode {
+            InvalidFlightNumber, InvalidAirportCode, BothxmlAndRegularFileSelected {
       int counter = 0;
       boolean printFlag = false;
 
@@ -160,6 +178,8 @@ public class Project3 {
 
       boolean prettyFlag = false;
       String prettyOutput = null;
+
+      boolean xmlFileFlag = false;
 
       while (counter < args.length && args[counter].startsWith("-")) //Check for options
       {
@@ -179,10 +199,19 @@ public class Project3 {
             prettyOutput = args[counter];
             prettyFlag = true;
             break;
+          case "-xmlFile":
+            counter++;
+            pathToTextFile = args[counter];
+            xmlFileFlag = true;
+            break;
           default:
             throw new InvalidOption();
         }
         counter++;
+      }
+      if (xmlFileFlag && textFileFlag)
+      {
+        throw new BothxmlAndRegularFileSelected();
       }
       if (args.length - counter < 10) throw new TooFewArgs();
       if (args.length - counter > 10) throw new TooManyArgs();
@@ -204,6 +233,7 @@ public class Project3 {
       this.pathToTextFile = pathToTextFile;
       this.prettyFlag = prettyFlag;
       this.prettyOutput = prettyOutput;
+      this.xmlFileFlag = xmlFileFlag;
     }
   }
 

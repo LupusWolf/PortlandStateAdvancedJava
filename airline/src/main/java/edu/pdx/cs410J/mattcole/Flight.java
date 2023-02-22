@@ -54,7 +54,7 @@ public class Flight extends AbstractFlight implements java.lang.Comparable<Fligh
    * file. By using the name and valueof enum methods, we are able to cleanly specify a file format without the use
    * of long string switch cases.
    */
-  public enum Fields {source, departure, destination, arrival }
+  public enum Fields {src, depart, dest, arrive}
 
   /**
    * This method allows us to set a field based on an enum value provided by the fields enum. When combined with the
@@ -62,39 +62,67 @@ public class Flight extends AbstractFlight implements java.lang.Comparable<Fligh
    * @param field field we want to set
    * @param value The value we want to set it too
    */
-  public void setFieldByEnum(Fields field, String value) throws FlightParseDateTimeException, Project3.ArrivesBeforeDeparts, Project3.InvalidAirportCode {
+  public void setFieldByEnum(Fields field, String value) throws FlightParseDateTimeException, Project4.ArrivesBeforeDeparts, Project4.InvalidAirportCode {
     try {
       switch (field) {
-        case source:
-          if (!AirportNames.getNamesMap().containsKey(value)) throw new Project3.InvalidAirportCode();
+        case src:
+          if (!AirportNames.getNamesMap().containsKey(value)) throw new Project4.InvalidAirportCode();
           source = value;
           break;
-        case departure:
+        case depart:
           departure = dateFormat.parse(value);
           break;
-        case destination:
-          if (!AirportNames.getNamesMap().containsKey(value)) throw new Project3.InvalidAirportCode();
+        case dest:
+          if (!AirportNames.getNamesMap().containsKey(value)) throw new Project4.InvalidAirportCode();
           destination = value;
           break;
-        case arrival:
+        case arrive:
           arrival = dateFormat.parse(value);
           break;
       }
-      if (durationInMinutes == -1 && arrival != null && departure != null)
-      {
-        if (arrival.compareTo(departure) < 0)
-        {
-          throw new Project3.ArrivesBeforeDeparts();
-        }
-        var timeAsLong = arrival.getTime() - departure.getTime();
-        var millisecondsInMinute = 1000 * 60;
-        durationInMinutes = timeAsLong/millisecondsInMinute;
-      }
+      updateDuration();
     } catch (ParseException e)
     {
       throw new FlightParseDateTimeException();
     }
   }
+  /**
+   * This method allows us to set a field based on an enum value provided by the fields enum.
+   * @param field date field we want to set
+   * @param value The date we want to set it too
+   */
+  public void SetDateFieldByEnum(Fields field, Date value) throws Project4.ArrivesBeforeDeparts {
+    switch (field)
+    {
+      case depart:
+        departure = value;
+        break;
+      case arrive:
+        arrival = value;
+        break;
+      default:
+        throw new RuntimeException("Tried to set non-date field with date:");
+    }
+    updateDuration();
+  }
+
+  /**
+   * Updates the duration of flights when necessary data is available
+   * @throws Project4.ArrivesBeforeDeparts
+   */
+  private void updateDuration() throws Project4.ArrivesBeforeDeparts {
+    if (durationInMinutes == -1 && arrival != null && departure != null)
+    {
+      if (arrival.compareTo(departure) < 0)
+      {
+        throw new Project4.ArrivesBeforeDeparts();
+      }
+      var timeAsLong = arrival.getTime() - departure.getTime();
+      var millisecondsInMinute = 1000 * 60;
+      durationInMinutes = timeAsLong/millisecondsInMinute;
+    }
+  }
+
   public long getDurationInMinutes()
   {
     return durationInMinutes;
@@ -109,14 +137,14 @@ public class Flight extends AbstractFlight implements java.lang.Comparable<Fligh
   {
     switch (field)
     {
-      case source:
+      case src:
         return source;
-      case departure:
+      case depart:
         if (departure == null) return null;
         return dateFormat.format(departure);
-      case destination:
+      case dest:
         return destination;
-      case arrival:
+      case arrive:
         if (arrival == null) return null;
         return dateFormat.format(arrival);
     }
@@ -210,7 +238,7 @@ public class Flight extends AbstractFlight implements java.lang.Comparable<Fligh
     for (Fields field : Fields.values())
     {
       var fieldValue = getFieldByEnum(field);
-      if (field == Fields.source || field == Fields.destination) fieldValue=AirportNames.getNamesMap().get(fieldValue);
+      if (field == Fields.src || field == Fields.dest) fieldValue=AirportNames.getNamesMap().get(fieldValue);
       current = current.replace("%" + field.name() + "%",fieldValue);
     }
     current = current.replace("%number%", "" + number);
@@ -235,11 +263,11 @@ public class Flight extends AbstractFlight implements java.lang.Comparable<Fligh
    * @param arrival when the flight is going to arrive at its destination
    */
 
-  public Flight(int number, String source, String departure, String destination, String arrival) throws FlightParseDateTimeException, Project3.ArrivesBeforeDeparts, Project3.InvalidAirportCode {
+  public Flight(int number, String source, String departure, String destination, String arrival) throws FlightParseDateTimeException, Project4.ArrivesBeforeDeparts, Project4.InvalidAirportCode {
     this.number = number;
-    setFieldByEnum(Fields.source,source);
-    setFieldByEnum(Fields.departure,departure);
-    setFieldByEnum(Fields.destination,destination);
-    setFieldByEnum(Fields.arrival,arrival);
+    setFieldByEnum(Fields.src,source);
+    setFieldByEnum(Fields.depart,departure);
+    setFieldByEnum(Fields.dest,destination);
+    setFieldByEnum(Fields.arrive,arrival);
   }
 }

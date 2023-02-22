@@ -56,9 +56,9 @@ public class TextParser implements AirlineParser<Airline> {
     } catch (ArrayIndexOutOfBoundsException e) { //Really if we have any sort of error here we should just inform the user of a malformed
                             //file
       throw new ParserException("Error parsing file", e);
-    } catch (Project3.ArrivesBeforeDeparts e) {
+    } catch (Project4.ArrivesBeforeDeparts e) {
       throw new ParserException("Flight in file arrives before it departs", e);
-    } catch (Project3.InvalidAirportCode e) {
+    } catch (Project4.InvalidAirportCode e) {
       throw new ParserException("Invalid airport code", e);
     }
   }

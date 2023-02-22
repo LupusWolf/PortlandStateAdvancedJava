@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
 
+
 /**
  * Dumps data in airline into given output stream
  */
@@ -23,10 +24,10 @@ public class TextDumper implements AirlineDumper<Airline> {
   @Override
   public void dump(Airline airline) {
     try (
-      PrintWriter pw = new PrintWriter(this.writer)
-      ) {
+            PrintWriter pw = new PrintWriter(this.writer)
+    ) {
       pw.println(airline.getName());
-      for (Flight flight : airline.getFlights()) //Loop through every file
+      for (Flight flight : airline.getFlights()) //Loop through every flight
       {
         for (Flight.Fields field : Flight.Fields.values()) //We loop through every field and write it out
         {

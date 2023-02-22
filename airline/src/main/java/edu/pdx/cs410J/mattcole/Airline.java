@@ -68,7 +68,7 @@ public class Airline extends AbstractAirline<Flight> {
    * @param value The value we are setting the field to
    */
   public void SetDetailOfFlight(int flightNumber, Flight.Fields field, String value) throws
-          Flight.FlightParseDateTimeException, Project3.ArrivesBeforeDeparts, Project3.InvalidAirportCode {
+          Flight.FlightParseDateTimeException, Project4.ArrivesBeforeDeparts, Project4.InvalidAirportCode {
     if (!flightBuilder.containsKey(flightNumber))
     {
       flightBuilder.put(flightNumber, new Flight(flightNumber));

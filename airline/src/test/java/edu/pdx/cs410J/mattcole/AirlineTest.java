@@ -20,7 +20,7 @@ public class AirlineTest {
     /**
      * Sets up a basic airline for testing
      */
-    Airline setupBasicAirline() throws Flight.FlightParseDateTimeException, Project3.ArrivesBeforeDeparts, Project3.InvalidAirportCode {
+    Airline setupBasicAirline() throws Flight.FlightParseDateTimeException, Project4.ArrivesBeforeDeparts, Project4.InvalidAirportCode {
         var airlineName = "name";
         var airline = new Airline(airlineName);
 
@@ -31,7 +31,7 @@ public class AirlineTest {
         return airline;
     }
     @Test
-    void testAirlineName() throws Project3.ArrivesBeforeDeparts, Flight.FlightParseDateTimeException, Project3.InvalidAirportCode {
+    void testAirlineName() throws Project4.ArrivesBeforeDeparts, Flight.FlightParseDateTimeException, Project4.InvalidAirportCode {
         var airline = setupBasicAirline();
         assertThat(airline.getName(), equalTo("name"));
     }
@@ -39,7 +39,7 @@ public class AirlineTest {
      * Makes sure that the collection returned by flights is of the correct size
      */
     @Test
-    void testAirlineCount() throws Project3.ArrivesBeforeDeparts, Flight.FlightParseDateTimeException, Project3.InvalidAirportCode {
+    void testAirlineCount() throws Project4.ArrivesBeforeDeparts, Flight.FlightParseDateTimeException, Project4.InvalidAirportCode {
         var airline = setupBasicAirline();
         var flights = airline.getFlights();
         assertThat(flights.size(), equalTo( 2));
@@ -49,7 +49,7 @@ public class AirlineTest {
      * Makes sure that flights added to an airline can be retrieved properly
      */
     @Test
-    void testAirlineNumber() throws Project3.ArrivesBeforeDeparts, Flight.FlightParseDateTimeException, Project3.InvalidAirportCode {
+    void testAirlineNumber() throws Project4.ArrivesBeforeDeparts, Flight.FlightParseDateTimeException, Project4.InvalidAirportCode {
         var airline = setupBasicAirline();
         Collection<Flight> flights = airline.getFlights();
         var array = flights.toArray(new Flight[0]);
