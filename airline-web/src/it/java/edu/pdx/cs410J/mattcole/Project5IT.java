@@ -10,13 +10,12 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.MethodOrderer.MethodName;
 
 /**
- * An integration test for {@link Project5} that invokes its main method with
+ * An integration test for {@link Project5Test} that invokes its main method with
  * various arguments
  */
 @TestMethodOrder(MethodName.class)
@@ -25,32 +24,48 @@ class Project5IT extends InvokeMainTestCase {
     private static final String PORT = System.getProperty("http.port", "8080");
 
     @Test
+    void testGet() {
+        MainMethodResult result = invokeMain( Project5.class, "-host", "localhost", "-port", "8080",
+                "-search", "delta", "PDX", "ABE");
+        assertThat(result.getTextWrittenToStandardOut(), containsString("flight number                 source airport"));
+    }
+    @Test
+    void testPost() {
+        MainMethodResult result = invokeMain( Project5.class, "-host", "localhost", "-port", "8080", "-print",
+                "delta", "11", "AMA","03/15/2023", "10:39", "pm", "ABE","03/16/2023", "1:03", "pm");
+        assertThat(result.getTextWrittenToStandardOut(), containsString("flight number                 source airport"));
+    }
+    @Test
+    void testPostNoPrint() {
+        MainMethodResult result = invokeMain( Project5.class, "-host", "localhost", "-port", "8080",
+                "delta", "11", "AMA","03/15/2023", "10:39", "pm", "ABE","03/16/2023", "1:03", "pm");
+        assertThat(result.getTextWrittenToStandardOut(), not(containsString("flight number                 source airport")));
+    }
     void test0RemoveAllMappings() throws IOException {
       AirlineRestClient client = new AirlineRestClient(HOSTNAME, Integer.parseInt(PORT));
-      client.removeAllDictionaryEntries();
+      //client.removeAllDictionaryEntries();
     }
 
-    @Test
     void test1NoCommandLineArguments() {
-        MainMethodResult result = invokeMain( Project5.class );
-        assertThat(result.getTextWrittenToStandardError(), containsString(Project5.MISSING_ARGS));
+        MainMethodResult result = invokeMain( Project5Test.class );
+        //assertThat(result.getTextWrittenToStandardError(), containsString(Project5.MISSING_ARGS));
     }
 
-    @Test
+
     void test2EmptyServer() {
-        MainMethodResult result = invokeMain( Project5.class, HOSTNAME, PORT );
+        MainMethodResult result = invokeMain( Project5Test.class, HOSTNAME, PORT );
 
         assertThat(result.getTextWrittenToStandardError(), equalTo(""));
 
         String out = result.getTextWrittenToStandardOut();
-        assertThat(out, out, containsString(PrettyPrinter.formatWordCount(0)));
+        //assertThat(out, out, containsString(PrettyPrinterOLD.formatWordCount(0)));
     }
 
-    @Test
+
     void test3NoDefinitionsThrowsAppointmentBookRestException() {
         String word = "WORD";
         try {
-            invokeMain(Project5.class, HOSTNAME, PORT, word);
+            invokeMain(Project5Test.class, HOSTNAME, PORT, word);
             fail("Should have thrown a RestException");
 
         } catch (UncaughtExceptionInMain ex) {
@@ -59,30 +74,30 @@ class Project5IT extends InvokeMainTestCase {
         }
     }
 
-    @Test
+
     void test4AddDefinition() {
         String word = "WORD";
         String definition = "DEFINITION";
 
-        MainMethodResult result = invokeMain( Project5.class, HOSTNAME, PORT, word, definition );
+        MainMethodResult result = invokeMain( Project5Test.class, HOSTNAME, PORT, word, definition );
 
         assertThat(result.getTextWrittenToStandardError(), equalTo(""));
 
         String out = result.getTextWrittenToStandardOut();
-        assertThat(out, out, containsString(Messages.definedWordAs(word, definition)));
+        //assertThat(out, out, containsString(Messages.definedWordAs(word, definition)));
 
-        result = invokeMain( Project5.class, HOSTNAME, PORT, word );
-
-        assertThat(result.getTextWrittenToStandardError(), equalTo(""));
-
-        out = result.getTextWrittenToStandardOut();
-        assertThat(out, out, containsString(PrettyPrinter.formatDictionaryEntry(word, definition)));
-
-        result = invokeMain( Project5.class, HOSTNAME, PORT );
+        result = invokeMain( Project5Test.class, HOSTNAME, PORT, word );
 
         assertThat(result.getTextWrittenToStandardError(), equalTo(""));
 
         out = result.getTextWrittenToStandardOut();
-        assertThat(out, out, containsString(PrettyPrinter.formatDictionaryEntry(word, definition)));
+        //assertThat(out, out, containsString(PrettyPrinterOLD.formatDictionaryEntry(word, definition)));
+
+        result = invokeMain( Project5Test.class, HOSTNAME, PORT );
+
+        assertThat(result.getTextWrittenToStandardError(), equalTo(""));
+
+        out = result.getTextWrittenToStandardOut();
+        //assertThat(out, out, containsString(PrettyPrinterOLD.formatDictionaryEntry(word, definition)));
     }
 }

@@ -22,29 +22,21 @@
 
 </h1>
 
-<h2>
-    These forms let you interact with the simple word/definition REST API that
-    is created by the project archetype.
-</h2>
-
-
 <div>
     <form method="get" action="flights">
-        List all word/definition pairs <input type="submit" definition="Submit"/>
-    </form>
-</div>
-
-<div>
-    <form method="get" action="flights">
-        List definition for word <input name="word" type="text" size="10" title="word"/>
+        Airline name: <input name="airline" type="text" size="10" title="airline"/>
         <input type="submit" definition="Submit"/>
     </form>
 </div>
 
 <div>
     <form method="post" action="flights">
-        Create a new word/definition pair <input name="word" type="text" size="10" title="word"/> /
-        <input name="definition" type="text" size="10" title="definition"/>
+        airline <input name="airline" type="text" size="10" title="airline"/>
+        flightNumber <input name="flightNumber" type="text" size="10" title="flightNumber"/>
+        src <input name="src" type="text" size="10" title="src"/>
+        depart <input name="depart" type="text" size="10" title="depart"/>
+        dest <input name="dest" type="text" size="10" title="dest"/>
+        arrive <input name="arrive" type="text" size="10" title="arrive"/>
         <input type="submit" definition="Submit"/>
     </form>
 </div>

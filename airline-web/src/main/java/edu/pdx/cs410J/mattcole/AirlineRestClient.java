@@ -6,6 +6,7 @@ import edu.pdx.cs410J.web.HttpRequestHelper;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.io.Writer;
 import java.util.Map;
 
 import static edu.pdx.cs410J.web.HttpRequestHelper.Response;
@@ -14,8 +15,7 @@ import static java.net.HttpURLConnection.HTTP_OK;
 
 /**
  * A helper class for accessing the rest client.  Note that this class provides
- * an example of how to make gets and posts to a URL.  You'll need to change it
- * to do something other than just send dictionary entries.
+ * an example of how to make gets and posts to a URL.
  */
 public class AirlineRestClient
 {
@@ -40,38 +40,50 @@ public class AirlineRestClient
       this.http = http;
     }
 
-  /**
-   * Returns all dictionary entries from the server
-   */
-  public Map<String, String> getAllDictionaryEntries() throws IOException, ParserException {
-    Response response = http.get(Map.of());
-    throwExceptionIfNotOkayHttpStatus(response);
 
-    TextParser parser = new TextParser(new StringReader(response.getContent()));
-    return parser.parse();
-  }
 
   /**
-   * Returns the definition for the given word
+   * Returns an airline based on its name
    */
-  public String getDefinition(String word) throws IOException, ParserException {
-    Response response = http.get(Map.of(AirlineServlet.WORD_PARAMETER, word));
+  public void writeOutAirline(String airline, Writer writer) throws IOException, ParserException {
+    Response response = http.get(Map.of("airline", airline));
     throwExceptionIfNotOkayHttpStatus(response);
     String content = response.getContent();
 
-    TextParser parser = new TextParser(new StringReader(content));
-    return parser.parse().get(word);
+    XmlParser parser = new XmlParser(new StringReader(content));
+    PrettyPrinter printer = new PrettyPrinter(writer);
+    printer.dump(parser.parse());
   }
 
-  public void addDictionaryEntry(String word, String definition) throws IOException {
-    Response response = http.post(Map.of(AirlineServlet.WORD_PARAMETER, word, AirlineServlet.DEFINITION_PARAMETER, definition));
-    throwExceptionIfNotOkayHttpStatus(response);
-  }
+    /**
+     * Returns all flights from a given airline from src to dest
+     */
+    public void writeOutAirlineSearch(String airline, String src, String dest, Writer writer) throws IOException, ParserException {
+        Response response = http.get(Map.of("airline", airline,"src",src,"dest",dest));
+        throwExceptionIfNotOkayHttpStatus(response);
+        String content = response.getContent();
 
-  public void removeAllDictionaryEntries() throws IOException {
-    Response response = http.delete(Map.of());
-    throwExceptionIfNotOkayHttpStatus(response);
-  }
+        XmlParser parser = new XmlParser(new StringReader(content));
+        PrettyPrinter printer = new PrettyPrinter(writer);
+        printer.dump(parser.parse());
+    }
+    /**
+     * Returns the definition for the given word
+     */
+    public void postAirline(String airline, int flightNumber, String src, String depart, String dest,
+                            String arrive, Writer writer) throws IOException, ParserException {
+        Response response = http.post(Map.of("airline", airline,"flightNumber", "" + flightNumber, "src",
+                src,"depart", depart, "dest", dest, "arrive", arrive));
+
+        throwExceptionIfNotOkayHttpStatus(response);
+        String content = response.getContent();
+        if (writer != null) {
+            XmlParser parser = new XmlParser(new StringReader(content));
+            PrettyPrinter printer = new PrettyPrinter(writer);
+            printer.dump(parser.parse());
+        }
+    }
+
 
   private void throwExceptionIfNotOkayHttpStatus(Response response) {
     int code = response.getHttpStatusCode();

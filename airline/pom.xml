@@ -59,7 +59,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>edu.pdx.cs410J.mattcole.Project4</mainClass>
+              <mainClass>edu.pdx.cs410J.mattcole.constHolder</mainClass>
             </manifest>
           </archive>
         </configuration>
