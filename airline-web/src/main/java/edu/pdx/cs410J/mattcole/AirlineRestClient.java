@@ -4,7 +4,9 @@ import com.google.common.annotations.VisibleForTesting;
 import edu.pdx.cs410J.ParserException;
 import edu.pdx.cs410J.web.HttpRequestHelper;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.Writer;
 import java.util.Map;
@@ -47,9 +49,15 @@ public class AirlineRestClient
    */
   public void writeOutAirline(String airline, Writer writer) throws IOException, ParserException {
     Response response = http.get(Map.of("airline", airline));
+    if (response.getHttpStatusCode() == HttpServletResponse.SC_NOT_FOUND)
+    {
+        PrintWriter pw = new PrintWriter(writer);
+        pw.append("404 error: no airline was present with this name");
+        pw.flush();
+        return;
+    }
     throwExceptionIfNotOkayHttpStatus(response);
     String content = response.getContent();
-
     XmlParser parser = new XmlParser(new StringReader(content));
     PrettyPrinter printer = new PrettyPrinter(writer);
     printer.dump(parser.parse());
@@ -60,6 +68,14 @@ public class AirlineRestClient
      */
     public void writeOutAirlineSearch(String airline, String src, String dest, Writer writer) throws IOException, ParserException {
         Response response = http.get(Map.of("airline", airline,"src",src,"dest",dest));
+
+        if (response.getHttpStatusCode() == HttpServletResponse.SC_NOT_FOUND)
+        {
+            PrintWriter pw = new PrintWriter(writer);
+            pw.append("404 error: no airline was present with this name");
+            pw.flush();
+            return;
+        }
         throwExceptionIfNotOkayHttpStatus(response);
         String content = response.getContent();
 
