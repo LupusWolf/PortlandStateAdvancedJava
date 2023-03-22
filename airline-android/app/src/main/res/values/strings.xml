@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Airline</string>
+    <string name="scroll_message">Scroll horizontally to see all of the text below</string>
+</resources>
