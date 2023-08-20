@@ -18,7 +18,7 @@ public class AirlineXmlHelper extends ProjectXmlHelper {
      * The Public ID for the Family Tree DTD
      */
     protected static final String PUBLIC_ID =
-            "-//Portland State University//DTD CS410J main.java.edu.pdx.cs410J.mattcole.Airline//EN";
+            "-//Portland State University//DTD CS410J Airline//EN";
 
 
     public AirlineXmlHelper() {

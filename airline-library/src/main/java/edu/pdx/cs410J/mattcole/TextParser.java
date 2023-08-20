@@ -58,7 +58,7 @@ public class TextParser implements AirlineParser<Airline> {
             //file
             throw new ParserException("Error parsing file", e);
         } catch (ExceptionHolder.ArrivesBeforeDeparts e) {
-            throw new ParserException("main.java.edu.pdx.cs410J.mattcole.Flight in file arrives before it departs", e);
+            throw new ParserException("Flight in file arrives before it departs", e);
         } catch (ExceptionHolder.InvalidAirportCode e) {
             throw new ParserException("Invalid airport code", e);
         }
