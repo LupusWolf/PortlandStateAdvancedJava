@@ -1,18 +1,17 @@
 package edu.pdx.cs410J.mattcole;
 
 import edu.pdx.cs410J.AirlineDumper;
-
-import java.io.PrintWriter;
-import java.io.Writer;
-
-import java.util.Calendar;
-import javax.xml.parsers.*;
-import javax.xml.transform.*;
-import javax.xml.transform.dom.*; // DOMSource
-import javax.xml.transform.stream.*; // StreamResult
 import org.w3c.dom.*;
 
-import static java.lang.System.err;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.PrintWriter;
+import java.io.Writer;
+import java.util.Calendar;
 
 
 public class XmlDumper implements AirlineDumper<Airline> {
@@ -24,6 +23,7 @@ public class XmlDumper implements AirlineDumper<Airline> {
 
     /**
      * Writes out the data in an airline to the writer used to instantiate the class in XML format
+     *
      * @param airline airline to write out
      */
     @Override
@@ -61,9 +61,8 @@ public class XmlDumper implements AirlineDumper<Airline> {
                 root.appendChild(name);
                 String br = airline.getName();
                 name.appendChild(doc.createTextNode(br));
-                for (Flight flight : airline.getFlights())
-                {
-                    dumpFlightToDom(doc, root,flight);
+                for (Flight flight : airline.getFlights()) {
+                    dumpFlightToDom(doc, root, flight);
                 }
             } catch (DOMException ex) {
                 throw new RuntimeException("Dom exception");
@@ -89,12 +88,12 @@ public class XmlDumper implements AirlineDumper<Airline> {
 
     /**
      * Dump a flight into the DOM at a given root and with a given flight
-     * @param doc document to add it to
-     * @param root where to insert the new element
+     *
+     * @param doc    document to add it to
+     * @param root   where to insert the new element
      * @param flight the flight to insert
      */
-    private void dumpFlightToDom(Document doc, Element root, Flight flight)
-    {
+    private void dumpFlightToDom(Document doc, Element root, Flight flight) {
         Element flightElement = doc.createElement("flight");
         root.appendChild(flightElement);
 
@@ -111,30 +110,30 @@ public class XmlDumper implements AirlineDumper<Airline> {
 
     /**
      * Inserts a simple field into the dom. A simple field is a field with just a string value (E.G. Dest/Src)
-     * @param doc document to add it to
+     *
+     * @param doc           document to add it to
      * @param flightElement flight to add field to
-     * @param flight flight to get data from
-     * @param field field to copy over
+     * @param flight        flight to get data from
+     * @param field         field to copy over
      */
-    private void dumpSimpleFieldToDom(Document doc, Element flightElement, Flight flight, Flight.Fields field)
-    {
+    private void dumpSimpleFieldToDom(Document doc, Element flightElement, Flight flight, Flight.Fields field) {
         var value = flight.getFieldByEnum(field); //Use the get field by enum to get the data for this field
         Element currentElement = doc.createElement(field.name());
         flightElement.appendChild(currentElement);
         currentElement.appendChild(doc.createTextNode(value));
     }
+
     /**
      * Inserts a date field into the dom.
-     * @param doc document to add it to
+     *
+     * @param doc           document to add it to
      * @param flightElement flight to add field to
-     * @param flight flight to get data from
-     * @param field field to copy over
+     * @param flight        flight to get data from
+     * @param field         field to copy over
      */
-    private void dumpDateFieldToDom(Document doc, Element flightElement, Flight flight, Flight.Fields field)
-    {
+    private void dumpDateFieldToDom(Document doc, Element flightElement, Flight flight, Flight.Fields field) {
         Calendar calendar = Calendar.getInstance();
-        switch (field)
-        {
+        switch (field) {
             case arrive:
                 calendar.setTime(flight.getArrival());
                 break;

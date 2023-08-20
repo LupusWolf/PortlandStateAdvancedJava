@@ -19,8 +19,9 @@ public class ConverterIT extends InvokeMainTestCase {
      */
     private MainMethodResult invokeMain(String... args) {
 
-        return invokeMain( Converter.class, args );
+        return invokeMain(Converter.class, args);
     }
+
     /**
      * Tests converter with valid input
      */
@@ -39,13 +40,13 @@ public class ConverterIT extends InvokeMainTestCase {
         assertThat(Files.readString(xml.toPath()), equalTo(Files.readString(xml2.toPath())));
 
     }
+
     /**
      * Tests invalid args
      */
     @Test
-    public void invalidArgsTest()
-    {
+    public void invalidArgsTest() {
         var results = invokeMain("", "", "");
-        assert(results.getTextWrittenToStandardOut().contains("Incorrect number of args"));
+        assert (results.getTextWrittenToStandardOut().contains("Incorrect number of args"));
     }
 }

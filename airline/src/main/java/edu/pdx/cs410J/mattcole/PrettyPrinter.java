@@ -3,11 +3,8 @@ package edu.pdx.cs410J.mattcole;
 import edu.pdx.cs410J.AirlineDumper;
 import edu.pdx.cs410J.AirportNames;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Prints out an airline in a pretty format
@@ -24,6 +21,7 @@ public class PrettyPrinter implements AirlineDumper<Airline> {
 
     /**
      * Writes out the data in an airline to the writer used to instantiate the class
+     *
      * @param airline airline to write out
      */
     @Override
@@ -32,21 +30,18 @@ public class PrettyPrinter implements AirlineDumper<Airline> {
                 PrintWriter pw = new PrintWriter(this.writer)
         ) {
             pw.println("Flight list for airline: " + airline + "\n");
-            var headers = new String[] {"flight number","source airport","departure date/time","destination airport"
-                    ,"arrival date/time","duration (in minutes)"};
-            for (String header : headers)
-            {
+            var headers = new String[]{"flight number", "source airport", "departure date/time", "destination airport"
+                    , "arrival date/time", "duration (in minutes)"};
+            for (String header : headers) {
                 pw.print(center("", header));
             }
             pw.print("\n");
             pw.print("_".repeat(padding * headers.length) + "\n");
             for (Flight flight : airline.getFlights()) {
                 pw.print(center("", "" + flight.getNumber()));
-                for (Flight.Fields field : Flight.Fields.values())
-                {
+                for (Flight.Fields field : Flight.Fields.values()) {
                     String value;
-                    switch (field)
-                    {
+                    switch (field) {
                         case src:
                         case dest:
                             value = AirportNames.getName(flight.getFieldByEnum(field));
@@ -65,13 +60,13 @@ public class PrettyPrinter implements AirlineDumper<Airline> {
 
     /**
      * Centers text
+     *
      * @param prefix text to put before center text
-     * @param value text to center
+     * @param value  text to center
      * @return a string with a given string in the center
      */
-    private String center(String prefix, String value)
-    {
-        value = prefix + " ".repeat((padding - value.length() - prefix.length())/2) + value;
+    private String center(String prefix, String value) {
+        value = prefix + " ".repeat((padding - value.length() - prefix.length()) / 2) + value;
         value += " ".repeat(padding - value.length());
         return value;
     }

@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class AirlineTest {
@@ -24,17 +24,19 @@ public class AirlineTest {
         var airlineName = "name";
         var airline = new Airline(airlineName);
 
-        var flight1 = new Flight(flight1Numb, "PDX","03/15/2023 10:31 PM","ABE","03/16/2023 1:03 PM");
-        var flight2 = new Flight(flight2Numb,  "PDX","03/15/2023 10:32 PM","ABE","03/16/2023 1:03 PM");
+        var flight1 = new Flight(flight1Numb, "PDX", "03/15/2023 10:31 PM", "ABE", "03/16/2023 1:03 PM");
+        var flight2 = new Flight(flight2Numb, "PDX", "03/15/2023 10:32 PM", "ABE", "03/16/2023 1:03 PM");
         airline.addFlight(flight1);
         airline.addFlight(flight2);
         return airline;
     }
+
     @Test
     void testAirlineName() throws Project4.ArrivesBeforeDeparts, Flight.FlightParseDateTimeException, Project4.InvalidAirportCode {
         var airline = setupBasicAirline();
         assertThat(airline.getName(), equalTo("name"));
     }
+
     /**
      * Makes sure that the collection returned by flights is of the correct size
      */
@@ -42,7 +44,7 @@ public class AirlineTest {
     void testAirlineCount() throws Project4.ArrivesBeforeDeparts, Flight.FlightParseDateTimeException, Project4.InvalidAirportCode {
         var airline = setupBasicAirline();
         var flights = airline.getFlights();
-        assertThat(flights.size(), equalTo( 2));
+        assertThat(flights.size(), equalTo(2));
     }
 
     /**
@@ -54,8 +56,7 @@ public class AirlineTest {
         Collection<Flight> flights = airline.getFlights();
         var array = flights.toArray(new Flight[0]);
         ///Make sure order of flights is correct
-        if (array[0].getNumber() < array[1].getNumber())
-        {
+        if (array[0].getNumber() < array[1].getNumber()) {
             var temp = array[0];
             array[0] = array[1];
             array[1] = temp;

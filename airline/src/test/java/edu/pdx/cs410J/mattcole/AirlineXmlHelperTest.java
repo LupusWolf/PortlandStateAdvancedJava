@@ -13,40 +13,40 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AirlineXmlHelperTest {
 
-  @Test
-  void canParseValidXmlFile() throws ParserConfigurationException, IOException, SAXException {
-    AirlineXmlHelper helper = new AirlineXmlHelper();
+    @Test
+    void canParseValidXmlFile() throws ParserConfigurationException, IOException, SAXException {
+        AirlineXmlHelper helper = new AirlineXmlHelper();
 
 
-    DocumentBuilderFactory factory =
-      DocumentBuilderFactory.newInstance();
-    factory.setValidating(true);
+        DocumentBuilderFactory factory =
+                DocumentBuilderFactory.newInstance();
+        factory.setValidating(true);
 
-    DocumentBuilder builder =
-      factory.newDocumentBuilder();
-    builder.setErrorHandler(helper);
-    builder.setEntityResolver(helper);
+        DocumentBuilder builder =
+                factory.newDocumentBuilder();
+        builder.setErrorHandler(helper);
+        builder.setEntityResolver(helper);
 
-    builder.parse(this.getClass().getResourceAsStream("valid-airline.xml"));
-  }
+        builder.parse(this.getClass().getResourceAsStream("valid-airline.xml"));
+    }
 
-  @Test
-  void cantParseInvalidXmlFile() throws ParserConfigurationException {
-    AirlineXmlHelper helper = new AirlineXmlHelper();
+    @Test
+    void cantParseInvalidXmlFile() throws ParserConfigurationException {
+        AirlineXmlHelper helper = new AirlineXmlHelper();
 
 
-    DocumentBuilderFactory factory =
-      DocumentBuilderFactory.newInstance();
-    factory.setValidating(true);
+        DocumentBuilderFactory factory =
+                DocumentBuilderFactory.newInstance();
+        factory.setValidating(true);
 
-    DocumentBuilder builder =
-      factory.newDocumentBuilder();
-    builder.setErrorHandler(helper);
-    builder.setEntityResolver(helper);
+        DocumentBuilder builder =
+                factory.newDocumentBuilder();
+        builder.setErrorHandler(helper);
+        builder.setEntityResolver(helper);
 
-    assertThrows(SAXParseException.class, () ->
-      builder.parse(this.getClass().getResourceAsStream("invalid-airline.xml"))
-    );
-  }
+        assertThrows(SAXParseException.class, () ->
+                builder.parse(this.getClass().getResourceAsStream("invalid-airline.xml"))
+        );
+    }
 
 }

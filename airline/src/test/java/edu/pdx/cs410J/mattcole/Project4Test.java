@@ -17,27 +17,29 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 class Project4Test {
 
-  /**
-   * Ensure README can be read as a resource
-   * @throws IOException Throws io exception when readme.txt doesn't exist
-   */
-  @Test
-  void readmeCanBeReadAsResource() throws IOException {
-    try (
-      InputStream readme = Project4.class.getResourceAsStream("README.txt")
-    ) {
-      assertThat(readme, not(nullValue()));
-      BufferedReader reader = new BufferedReader(new InputStreamReader(readme));
-      String line = reader.readLine();
-      assertThat(line, containsString("Matthew"));
+    /**
+     * Ensure README can be read as a resource
+     *
+     * @throws IOException Throws io exception when readme.txt doesn't exist
+     */
+    @Test
+    void readmeCanBeReadAsResource() throws IOException {
+        try (
+                InputStream readme = Project4.class.getResourceAsStream("README.txt")
+        ) {
+            assertThat(readme, not(nullValue()));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(readme));
+            String line = reader.readLine();
+            assertThat(line, containsString("Matthew"));
+        }
     }
-  }
-  @Test
-  void parseAirline() throws Project4.TooFewArgs, Project4.TooManyArgs, Project4.InvalidOption, Project4.ReadmeOption, Project4.InvalidAirportCode, Project4.InvalidFlightNumber, Project4.BothxmlAndRegularFileSelected {
-    var args = new String[]{"-textFile", "file.txt", "-print", "Delta", "5", "PDX","03/15/2023", "10:31","PM","ABE","03/16/2023", "1:03","PM"};
-    var parsedArgs = new Project4.ParsedCommandLine(args);
-    assertThat(parsedArgs.airlineName, equalTo("Delta"));
-    assertThat(parsedArgs.number, equalTo(5));
-    assertThat(parsedArgs.source, equalTo("PDX"));
-  }
+
+    @Test
+    void parseAirline() throws Project4.TooFewArgs, Project4.TooManyArgs, Project4.InvalidOption, Project4.ReadmeOption, Project4.InvalidAirportCode, Project4.InvalidFlightNumber, Project4.BothxmlAndRegularFileSelected {
+        var args = new String[]{"-textFile", "file.txt", "-print", "Delta", "5", "PDX", "03/15/2023", "10:31", "PM", "ABE", "03/16/2023", "1:03", "PM"};
+        var parsedArgs = new Project4.ParsedCommandLine(args);
+        assertThat(parsedArgs.airlineName, equalTo("Delta"));
+        assertThat(parsedArgs.number, equalTo(5));
+        assertThat(parsedArgs.source, equalTo("PDX"));
+    }
 }
