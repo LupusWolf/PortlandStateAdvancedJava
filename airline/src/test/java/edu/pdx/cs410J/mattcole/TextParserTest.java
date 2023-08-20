@@ -1,6 +1,8 @@
 package edu.pdx.cs410J.mattcole;
 
 import edu.pdx.cs410J.ParserException;
+import main.java.edu.pdx.cs410J.mattcole.Airline;
+import main.java.edu.pdx.cs410J.mattcole.TextParser;
 import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;
@@ -20,7 +22,7 @@ public class TextParserTest {
 
         TextParser parser = new TextParser(new InputStreamReader(resource));
         Airline airline = parser.parse();
-        assertThat(airline.getName(), equalTo("Test Airline"));
+        assertThat(airline.getName(), equalTo("Test main.java.edu.pdx.cs410J.mattcole.Airline"));
     }
 
     @Test

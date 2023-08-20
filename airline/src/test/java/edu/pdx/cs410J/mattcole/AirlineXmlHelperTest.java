@@ -1,5 +1,6 @@
 package edu.pdx.cs410J.mattcole;
 
+import main.java.edu.pdx.cs410J.mattcole.AirlineXmlHelper;
 import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;

@@ -1,27 +1,18 @@
 package edu.pdx.cs410J.mattcole;
 
-import edu.pdx.cs410J.AirlineParser;
 import edu.pdx.cs410J.AirportNames;
 import edu.pdx.cs410J.ParserException;
+import main.java.edu.pdx.cs410J.mattcole.*;
 
 import java.io.*;
+import java.util.Arrays;
+import java.util.function.Predicate;
+
 
 /**
  * The main class for the CS410J airline Project
  */
 public class Project4 {
-    public static final String ErrorInvalidDateTime = "Invalid date time given. Date and time should be in the format:"
-            + " mm/dd/yyyy hh:mm";
-    public static final String ErrorInvalidAirportCode = "Airport code did not match any known airport.";
-    public static final String ErrorInvalidNumber = "Invalid flight number. Flight number should be an integer";
-    public static final String ErrorTooFewArgs = "Missing command line arguments";
-    public static final String ErrorTooManyArgs = "Too many command line arguments";
-    public static final String CALL_AGAIN_WITH_README_TO_SEE_USAGE = "Call again with -readme to see usage";
-    public static final String ErrorUnknownOption = "Fatal error. Unknown option: ";
-    public static final String ErrorAirlineDoesntMatch = "Airline provided did not match airline of file";
-    public static final String ErrorMalformedFile = "Malformed input file!";
-    public static final String ErrorArrivesBeforeDeparts = "A flight departure must be before arrival";
-    public static final String ErrorBothXMLandTextFlag = "Can only read from a text OR an xml file not both!";
 
 
     /**
@@ -54,112 +45,56 @@ public class Project4 {
             printResource("help.txt");
             return;
         }
+        Predicate<String> isReadmeOption = i -> (i.equals("-README"));
+
+        if (Arrays.stream(args).anyMatch(isReadmeOption)) {
+            printResource("README.txt");
+            return;
+        }
         ParsedCommandLine commandLine;
         try {
             commandLine = new ParsedCommandLine(args);
-
-            var flight = new Flight(commandLine.number, commandLine.source, commandLine.departure, commandLine.destination,
-                    commandLine.arrival);
-            Airline airline;
-            File file = null;
-            if (commandLine.textFileFlag || commandLine.xmlFileFlag) {
-                file = new File(commandLine.pathToTextFile);
-            }
-            if (file != null && file.exists()) {
-                AirlineParser<Airline> parser = null;
-                if (commandLine.textFileFlag) {
-                    airline = new TextParser(new FileReader(file)).parse();
-                } else {
-                    airline = new XmlParser(new FileReader(file)).parse();
-                }
-
-                if (!airline.getName().equals(commandLine.airlineName)) //Make sure airline in file matches given airline
-                {
-                    System.out.println(ErrorAirlineDoesntMatch);
-                    System.out.println(CALL_AGAIN_WITH_README_TO_SEE_USAGE);
-                }
-            } else {
-                airline = new Airline(commandLine.airlineName);
-            }
-            airline.addFlight(flight);
-            if (commandLine.printFlag) {
-                System.out.println(flight);
-            }
-            if (commandLine.textFileFlag) {
-                new TextDumper(new FileWriter(file)).dump(airline);
-            }
-            if (commandLine.xmlFileFlag) {
-                new XmlDumper(new FileWriter(file)).dump(airline);
-            }
-            if (commandLine.prettyFlag) {
-                Writer writer;
-                if (commandLine.prettyOutput.equals("-")) {
-                    writer = new PrintWriter(System.out);
-                } else {
-                    writer = new FileWriter(commandLine.prettyOutput);
-                }
-                new PrettyPrinter(writer).dump(airline);
-            }
+            performActionGivenByCommandLine(commandLine);
         } catch (FileNotFoundException exception) {
-            assert (false); //Shouldn't occur
+            assert (false); //Shouldn't occur because we check before we read the file that it exists
         } catch (ParserException parserException) {
-            System.out.println(ErrorMalformedFile); //Tell the user if we have been given a malformed file
+            System.out.println(MessageHolder.ErrorMalformedFile); //Tell the user if we have been given a malformed file
         } catch (IOException e) {
-            assert (false); //Shouldn't occur
+            assert (false); //Shouldn't occur for the same reason as file not found
             throw new RuntimeException(e);
-        } catch (
-                ReadmeOption e) { //I realize this is suboptimal, but it would be really hard to create a separate control
-            //flow for it
-            printResource("README.txt");
-        } catch (TooManyArgs e) {
-            System.out.println(ErrorTooManyArgs);
-            System.out.println(CALL_AGAIN_WITH_README_TO_SEE_USAGE);
-        } catch (TooFewArgs e) {
-            System.out.println(ErrorTooFewArgs);
-            System.out.println(CALL_AGAIN_WITH_README_TO_SEE_USAGE);
-        } catch (InvalidFlightNumber e) {
-            System.out.println(ErrorInvalidNumber);
-            System.out.println(CALL_AGAIN_WITH_README_TO_SEE_USAGE);
-        } catch (InvalidAirportCode e) {
-            System.out.println(ErrorInvalidAirportCode);
-            System.out.println(CALL_AGAIN_WITH_README_TO_SEE_USAGE);
-        } catch (InvalidOption e) {
-            System.out.println(ErrorUnknownOption);
-            System.out.println(CALL_AGAIN_WITH_README_TO_SEE_USAGE);
-        } catch (Flight.FlightParseDateTimeException e) {
-            System.out.println(ErrorInvalidDateTime);
-            System.out.println(CALL_AGAIN_WITH_README_TO_SEE_USAGE);
-        } catch (ArrivesBeforeDeparts e) {
-            System.out.println(ErrorArrivesBeforeDeparts);
-            System.out.println(CALL_AGAIN_WITH_README_TO_SEE_USAGE);
-        } catch (BothxmlAndRegularFileSelected e) {
-            System.out.println(ErrorBothXMLandTextFlag);
-            System.out.println(CALL_AGAIN_WITH_README_TO_SEE_USAGE);
+        } catch (ExceptionHolder.InvalidInput e) {
+            System.out.println(e.getMessage());
+            System.out.println(MessageHolder.CALL_AGAIN_WITH_README_TO_SEE_USAGE);
         }
     }
 
-    public static class TooManyArgs extends Exception {
-    }
 
-    public static class TooFewArgs extends Exception {
-    }
+    private static void performActionGivenByCommandLine(ParsedCommandLine commandLine) throws ExceptionHolder.InvalidDateTime, IOException, ParserException, ExceptionHolder.ArrivesBeforeDeparts, ExceptionHolder.InvalidAirportCode, ExceptionHolder.AirlineDoesntMatch {
+        var flight = new Flight(commandLine.number, commandLine.source, commandLine.departure, commandLine.destination,
+                commandLine.arrival);
+        Airline airline;
+        if (commandLine.textFileFlag) {
+            airline = Airline.buildAirline(new TextAirlineStorer(commandLine.pathToTextFile), commandLine.airlineName);
+        } else if (commandLine.xmlFileFlag) {
+            airline = Airline.buildAirline(new XMLAirlineStorer(commandLine.pathToTextFile), commandLine.airlineName);
+        } else {
+            airline = new Airline(commandLine.airlineName);
+        }
 
-    public static class InvalidAirportCode extends Exception {
-    }
-
-    public static class InvalidFlightNumber extends Exception {
-    }
-
-    public static class InvalidOption extends Exception {
-    }
-
-    public static class ReadmeOption extends Exception {
-    }
-
-    public static class ArrivesBeforeDeparts extends Exception {
-    }
-
-    public static class BothxmlAndRegularFileSelected extends Exception {
+        airline.addFlight(flight);
+        if (commandLine.printFlag) {
+            System.out.println(flight);
+        }
+        if (commandLine.prettyFlag) {
+            Writer writer;
+            if (commandLine.prettyOutput.equals("-")) {
+                writer = new PrintWriter(System.out);
+            } else {
+                writer = new FileWriter(commandLine.prettyOutput);
+            }
+            new PrettyPrinter(writer).dump(airline);
+        }
+        airline.write();
     }
 
     /**
@@ -179,8 +114,8 @@ public class Project4 {
         public final String prettyOutput;
         public final boolean xmlFileFlag;
 
-        public ParsedCommandLine(String[] args) throws ReadmeOption, InvalidOption, TooFewArgs, TooManyArgs,
-                InvalidFlightNumber, InvalidAirportCode, BothxmlAndRegularFileSelected {
+        public ParsedCommandLine(String[] args) throws ExceptionHolder.InvalidOption, ExceptionHolder.TooFewArgs, ExceptionHolder.TooManyArgs,
+                ExceptionHolder.InvalidFlightNumber, ExceptionHolder.InvalidAirportCode, ExceptionHolder.BothxmlAndRegularFileSelected {
             int counter = 0;
             boolean printFlag = false;
 
@@ -196,7 +131,7 @@ public class Project4 {
             {
                 switch (args[counter]) {
                     case "-README":
-                        throw new ReadmeOption();
+                        throw new RuntimeException("Unhandled -README argument");
                     case "-print":
                         printFlag = true;
                         break;
@@ -216,28 +151,29 @@ public class Project4 {
                         xmlFileFlag = true;
                         break;
                     default:
-                        throw new InvalidOption();
+                        throw new ExceptionHolder.InvalidOption();
                 }
                 counter++;
             }
             if (xmlFileFlag && textFileFlag) {
-                throw new BothxmlAndRegularFileSelected();
+                throw new ExceptionHolder.BothxmlAndRegularFileSelected();
             }
-            if (args.length - counter < 10) throw new TooFewArgs();
-            if (args.length - counter > 10) throw new TooManyArgs();
-            //Seperate args into inputs for making the flight and validation. Use counter as an offset for the options
+            if (args.length - counter < 10) throw new ExceptionHolder.TooFewArgs();
+            if (args.length - counter > 10) throw new ExceptionHolder.TooManyArgs();
+            //Separate args into inputs for making the flight and validation. Use counter as an offset for the options
             airlineName = args[counter];
             try {
                 number = Integer.parseInt(args[counter + 1]);
             } catch (NumberFormatException e) {
-                throw new InvalidFlightNumber();
+                throw new ExceptionHolder.InvalidFlightNumber();
             }
             source = args[counter + 2];
             departure = args[counter + 3] + " " + args[counter + 4] + " " + args[counter + 5];
             destination = args[counter + 6];
             arrival = args[counter + 7] + " " + args[counter + 8] + " " + args[counter + 9];
             var airports = AirportNames.getNamesMap();
-            if (!airports.containsKey(source) || !airports.containsKey(destination)) throw new InvalidAirportCode();
+            if (!airports.containsKey(source) || !airports.containsKey(destination))
+                throw new ExceptionHolder.InvalidAirportCode();
             this.printFlag = printFlag;
             this.textFileFlag = textFileFlag;
             this.pathToTextFile = pathToTextFile;

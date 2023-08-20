@@ -1,5 +1,6 @@
 package edu.pdx.cs410J.mattcole;
 
+import main.java.edu.pdx.cs410J.mattcole.ExceptionHolder;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
@@ -35,7 +36,7 @@ class Project4Test {
     }
 
     @Test
-    void parseAirline() throws Project4.TooFewArgs, Project4.TooManyArgs, Project4.InvalidOption, Project4.ReadmeOption, Project4.InvalidAirportCode, Project4.InvalidFlightNumber, Project4.BothxmlAndRegularFileSelected {
+    void parseAirline() throws ExceptionHolder.TooFewArgs, ExceptionHolder.TooManyArgs, ExceptionHolder.InvalidOption, ExceptionHolder.ReadmeOption, ExceptionHolder.InvalidAirportCode, ExceptionHolder.InvalidFlightNumber, ExceptionHolder.BothxmlAndRegularFileSelected {
         var args = new String[]{"-textFile", "file.txt", "-print", "Delta", "5", "PDX", "03/15/2023", "10:31", "PM", "ABE", "03/16/2023", "1:03", "PM"};
         var parsedArgs = new Project4.ParsedCommandLine(args);
         assertThat(parsedArgs.airlineName, equalTo("Delta"));

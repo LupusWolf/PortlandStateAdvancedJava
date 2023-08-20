@@ -1,6 +1,10 @@
 package edu.pdx.cs410J.mattcole;
 
 import edu.pdx.cs410J.ParserException;
+import main.java.edu.pdx.cs410J.mattcole.Airline;
+import main.java.edu.pdx.cs410J.mattcole.ExceptionHolder;
+import main.java.edu.pdx.cs410J.mattcole.XmlDumper;
+import main.java.edu.pdx.cs410J.mattcole.XmlParser;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -15,7 +19,7 @@ import static org.hamcrest.Matchers.equalTo;
 
 public class XmlParserTest {
     @Test
-    public void simpleTest(@TempDir File tempDir) throws Project4.ArrivesBeforeDeparts, Project4.InvalidAirportCode, Flight.FlightParseDateTimeException, IOException, ParserException {
+    public void simpleTest(@TempDir File tempDir) throws ExceptionHolder.ArrivesBeforeDeparts, ExceptionHolder.InvalidAirportCode, ExceptionHolder.InvalidDateTime, IOException, ParserException {
         File file = new File(tempDir, "airline.xml");
         Airline startingAirline = XmlDumperTest.createSimpleAirline();
         XmlDumper xmlDumper = new XmlDumper(new FileWriter(file));

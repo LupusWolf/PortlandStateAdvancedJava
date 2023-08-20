@@ -1,5 +1,8 @@
 package edu.pdx.cs410J.mattcole;
 
+import main.java.edu.pdx.cs410J.mattcole.Airline;
+import main.java.edu.pdx.cs410J.mattcole.ExceptionHolder;
+import main.java.edu.pdx.cs410J.mattcole.Flight;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
@@ -20,7 +23,7 @@ public class AirlineTest {
     /**
      * Sets up a basic airline for testing
      */
-    Airline setupBasicAirline() throws Flight.FlightParseDateTimeException, Project4.ArrivesBeforeDeparts, Project4.InvalidAirportCode {
+    Airline setupBasicAirline() throws ExceptionHolder.InvalidDateTime, ExceptionHolder.ArrivesBeforeDeparts, ExceptionHolder.InvalidAirportCode {
         var airlineName = "name";
         var airline = new Airline(airlineName);
 
@@ -32,7 +35,7 @@ public class AirlineTest {
     }
 
     @Test
-    void testAirlineName() throws Project4.ArrivesBeforeDeparts, Flight.FlightParseDateTimeException, Project4.InvalidAirportCode {
+    void testAirlineName() throws ExceptionHolder.ArrivesBeforeDeparts, ExceptionHolder.InvalidDateTime, ExceptionHolder.InvalidAirportCode {
         var airline = setupBasicAirline();
         assertThat(airline.getName(), equalTo("name"));
     }
@@ -41,7 +44,7 @@ public class AirlineTest {
      * Makes sure that the collection returned by flights is of the correct size
      */
     @Test
-    void testAirlineCount() throws Project4.ArrivesBeforeDeparts, Flight.FlightParseDateTimeException, Project4.InvalidAirportCode {
+    void testAirlineCount() throws ExceptionHolder.ArrivesBeforeDeparts, ExceptionHolder.InvalidDateTime, ExceptionHolder.InvalidAirportCode {
         var airline = setupBasicAirline();
         var flights = airline.getFlights();
         assertThat(flights.size(), equalTo(2));
@@ -51,7 +54,7 @@ public class AirlineTest {
      * Makes sure that flights added to an airline can be retrieved properly
      */
     @Test
-    void testAirlineNumber() throws Project4.ArrivesBeforeDeparts, Flight.FlightParseDateTimeException, Project4.InvalidAirportCode {
+    void testAirlineNumber() throws ExceptionHolder.ArrivesBeforeDeparts, ExceptionHolder.InvalidDateTime, ExceptionHolder.InvalidAirportCode {
         var airline = setupBasicAirline();
         Collection<Flight> flights = airline.getFlights();
         var array = flights.toArray(new Flight[0]);

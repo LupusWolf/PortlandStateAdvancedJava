@@ -1,5 +1,6 @@
 package edu.pdx.cs410J.mattcole;
 
+import main.java.edu.pdx.cs410J.mattcole.Flight;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;

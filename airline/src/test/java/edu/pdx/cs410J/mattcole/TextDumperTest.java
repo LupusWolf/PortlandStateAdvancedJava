@@ -1,6 +1,10 @@
 package edu.pdx.cs410J.mattcole;
 
 import edu.pdx.cs410J.ParserException;
+import main.java.edu.pdx.cs410J.mattcole.Airline;
+import main.java.edu.pdx.cs410J.mattcole.Flight;
+import main.java.edu.pdx.cs410J.mattcole.TextDumper;
+import main.java.edu.pdx.cs410J.mattcole.TextParser;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -14,7 +18,7 @@ public class TextDumperTest {
 
     @Test
     void airlineNameIsDumpedInTextFormat() {
-        String airlineName = "Test Airline";
+        String airlineName = "Test main.java.edu.pdx.cs410J.mattcole.Airline";
         Airline airline = new Airline(airlineName);
 
         StringWriter sw = new StringWriter();
@@ -41,7 +45,7 @@ public class TextDumperTest {
 
     @Test
     void canParseTextWrittenByTextDumper(@TempDir File tempDir) throws IOException, ParserException {
-        String airlineName = "Test Airline";
+        String airlineName = "Test main.java.edu.pdx.cs410J.mattcole.Airline";
         Airline airline = createDumpThenParseAirline(tempDir, airlineName, new Flight[0]);
         assertThat(airline.getName(), equalTo(airlineName));
     }

@@ -1,6 +1,7 @@
 package edu.pdx.cs410J.mattcole;
 
 import edu.pdx.cs410J.InvokeMainTestCase;
+import main.java.edu.pdx.cs410J.mattcole.MessageHolder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -32,7 +33,7 @@ class Project4IT extends InvokeMainTestCase {
     @Test
     void testInvalidOption() {
         MainMethodResult result = invokeMain("-print", "-invalid_option", "Delta", "5", "PDX", "03/15/2023", "10:39", "ABE", "03/16/2023", "1:03");
-        assertThat(result.getTextWrittenToStandardOut(), containsString(Project4.ErrorUnknownOption));
+        assertThat(result.getTextWrittenToStandardOut(), containsString(MessageHolder.ErrorInvalidOption));
     }
 
     /**
@@ -50,7 +51,7 @@ class Project4IT extends InvokeMainTestCase {
     @Test
     void testTooFewCommandLineArguments() {
         MainMethodResult result = invokeMain("1", "2", "3", "4");
-        assertThat(result.getTextWrittenToStandardOut(), containsString(Project4.ErrorTooFewArgs));
+        assertThat(result.getTextWrittenToStandardOut(), containsString(MessageHolder.ErrorTooFewArgs));
     }
 
     /**
@@ -59,7 +60,7 @@ class Project4IT extends InvokeMainTestCase {
     @Test
     void testTooManyCommandLineArguments() {
         MainMethodResult result = invokeMain("-print", "Delta", "5", "PDX", "03/15/2023", "10:39", "AM", "ABE", "03/16/2023", "1:03", "AM", "ExtraArg");
-        assertThat(result.getTextWrittenToStandardOut(), containsString(Project4.ErrorTooManyArgs));
+        assertThat(result.getTextWrittenToStandardOut(), containsString(MessageHolder.ErrorTooManyArgs));
     }
 
     /**
@@ -86,7 +87,7 @@ class Project4IT extends InvokeMainTestCase {
     @Test
     void testFlightInvalidFlightNumber() {
         MainMethodResult result = invokeMain("-print", "Delta", "not a number", "PDX", "03/15/2023", "10:39", "PM", "ABE", "03/16/2023", "1:03", "PM");
-        assertThat(result.getTextWrittenToStandardOut(), containsString(Project4.ErrorInvalidNumber));
+        assertThat(result.getTextWrittenToStandardOut(), containsString(MessageHolder.ErrorInvalidFlightNumber));
     }
 
     /**
@@ -95,7 +96,7 @@ class Project4IT extends InvokeMainTestCase {
     @Test
     void testFlightInvalidAirport() {
         MainMethodResult result = invokeMain("Delta", "5", "not a valid airport", "03/15/2023", "10:39", "PM", "ABE", "03/16/2023", "1:03", "PM");
-        assertThat(result.getTextWrittenToStandardOut(), containsString(Project4.ErrorInvalidAirportCode));
+        assertThat(result.getTextWrittenToStandardOut(), containsString(MessageHolder.ErrorInvalidAirportCode));
     }
 
     /**
@@ -104,7 +105,7 @@ class Project4IT extends InvokeMainTestCase {
     @Test
     void testFlightInvalidDateTime() {
         MainMethodResult result = invokeMain("Delta", "5", "PDX", "Invalid time", "10:39", "PM", "ABE", "03/16/2023", "1:03", "PM");
-        assertThat(result.getTextWrittenToStandardOut(), containsString(Project4.ErrorInvalidDateTime));
+        assertThat(result.getTextWrittenToStandardOut(), containsString(MessageHolder.ErrorInvalidDateTime));
     }
 
     /**
@@ -134,7 +135,7 @@ class Project4IT extends InvokeMainTestCase {
         File file = new File(tempDir, "airline.txt");
         Files.write(file.toPath(), "Delta".getBytes());
         MainMethodResult result = invokeMain("-textFile", file.getAbsolutePath(), "NotDelta", "5", "PDX", "03/02/2023", "10:39", "PM", "ABE", "03/16/2023", "1:03", "PM");
-        assertThat(result.getTextWrittenToStandardOut(), containsString(Project4.ErrorAirlineDoesntMatch));
+        assertThat(result.getTextWrittenToStandardOut(), containsString(MessageHolder.ErrorAirlineDoesntMatch));
     }
 
     /**
@@ -145,7 +146,7 @@ class Project4IT extends InvokeMainTestCase {
         File file = new File(tempDir, "airline.txt");
         Files.write(file.toPath(), "Delta\nfghasddfi".getBytes());
         MainMethodResult result = invokeMain("-textFile", file.getAbsolutePath(), "NotDelta", "5", "PDX", "03/02/2023", "10:39", "PM", "ABE", "03/16/2023", "1:03", "PM");
-        assertThat(result.getTextWrittenToStandardOut(), containsString(Project4.ErrorMalformedFile));
+        assertThat(result.getTextWrittenToStandardOut(), containsString(MessageHolder.ErrorMalformedFile));
     }
 
     /**
@@ -154,7 +155,7 @@ class Project4IT extends InvokeMainTestCase {
     @Test
     void testArriveBeforeDeparts() {
         MainMethodResult result = invokeMain("-print", "Delta", "5", "PDX", "03/15/2023", "10:39", "AM", "ABE", "03/14/2023", "1:03", "AM");
-        assertThat(result.getTextWrittenToStandardOut(), containsString(Project4.ErrorArrivesBeforeDeparts));
+        assertThat(result.getTextWrittenToStandardOut(), containsString(MessageHolder.ErrorArrivesBeforeDeparts));
     }
 
     /**
@@ -171,7 +172,7 @@ class Project4IT extends InvokeMainTestCase {
         invokeMain("-textFile", file.getAbsolutePath(), "-print", "Delta", "9", "PDX", "03/15/2023", "10:40", "PM", "ABE", "03/16/2023", "1:03", "PM");
         invokeMain("-textFile", file.getAbsolutePath(), "-print", "Delta", "4", "PDX", "03/15/2023", "10:20", "PM", "ABE", "03/16/2023", "1:03", "PM");
         result = invokeMain("-textFile", file.getAbsolutePath(), "-pretty", "-", "Delta", "10", "PDX", "03/15/2023", "10:39", "PM", "ABE", "03/16/2023", "1:03", "PM");
-        //assertThat(result.getTextWrittenToStandardOut(), containsString("Flight 5 departs Portland, OR at 03/15/2023 10:31 PM and will arrive at Allentown, PA at 03/15/2023 10:40 PM and the flight length is 9 minutes"));
+        //assertThat(result.getTextWrittenToStandardOut(), containsString("main.java.edu.pdx.cs410J.mattcole.Flight 5 departs Portland, OR at 03/15/2023 10:31 PM and will arrive at Allentown, PA at 03/15/2023 10:40 PM and the flight length is 9 minutes"));
     }
 
     /**
@@ -188,7 +189,7 @@ class Project4IT extends InvokeMainTestCase {
         invokeMain("-xmlFile", file.getAbsolutePath(), "-print", "Delta", "9", "PDX", "03/15/2023", "10:40", "PM", "ABE", "03/16/2023", "1:03", "PM");
         invokeMain("-xmlFile", file.getAbsolutePath(), "-print", "Delta", "4", "PDX", "03/15/2023", "10:20", "PM", "ABE", "03/16/2023", "1:03", "PM");
         result = invokeMain("-xmlFile", file.getAbsolutePath(), "-pretty", "-", "Delta", "10", "PDX", "03/15/2023", "10:39", "PM", "ABE", "03/16/2023", "1:03", "PM");
-        //assertThat(result.getTextWrittenToStandardOut(), containsString("Flight 5 departs Portland, OR at 03/15/2023 10:31 PM and will arrive at Allentown, PA at 03/15/2023 10:40 PM and the flight length is 9 minutes"));
+        //assertThat(result.getTextWrittenToStandardOut(), containsString("main.java.edu.pdx.cs410J.mattcole.Flight 5 departs Portland, OR at 03/15/2023 10:31 PM and will arrive at Allentown, PA at 03/15/2023 10:40 PM and the flight length is 9 minutes"));
     }
 
     /**
@@ -197,7 +198,7 @@ class Project4IT extends InvokeMainTestCase {
     @Test
     void testBothTextAndXmlFlag() {
         MainMethodResult result = invokeMain("-textFile", "", "-xmlFile", "", "Delta", "5", "PDX", "03/15/2023", "10:39", "AM", "ABE", "03/16/2023", "1:03", "AM");
-        assertThat(result.getTextWrittenToStandardOut(), containsString(Project4.ErrorBothXMLandTextFlag));
+        assertThat(result.getTextWrittenToStandardOut(), containsString(MessageHolder.ErrorBothxmlAndRegularFileSelected));
 
     }
 }
